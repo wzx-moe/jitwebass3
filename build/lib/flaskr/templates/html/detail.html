@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+
+{% block header %}
+    <h1>{% block title %}Add Books{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+    <br>
+    <div class="container mb-4">
+        <div class="row">
+            <div class="col">
+                <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+                    <ol class="carousel-indicators">
+                        <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
+                        <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+                        <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+                    </ol>
+                    <div class="carousel-inner">
+                        <div class="carousel-item active"><img
+                                src="{{ url_for('static', filename= './images/' + post['picture'],_t=val1) }}"
+                                class="d-block h-100" alt="..."></div>
+                    </div>
+                    <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span> <span class="sr-only">Previous</span>
+                    </a> <a class="carousel-control-next" href="#carouselExampleIndicators" role="button"
+                            data-slide="next"> <span class="carousel-control-next-icon" aria-hidden="true"></span> <span
+                        class="sr-only">Next</span> </a></div>
+            </div>
+            <div class="col">
+                <div class="mb-3">
+                    <h2>{{ post['title'] }}<button type="button" class="badge badge-pill badge-secondary"> Inventory <span
+                                            class="badge badge-light">{{ post['inventory'] }}</span></button></h2>
+                    <h3>Price: <span class="badge badge-danger mb">${{ post['price'] }}</span></h3>
+                </div>
+                <div class="card mb-3">
+                    <p class="card-header">Author: {{ post['author'] }}</p>
+                    <div class="card-body">
+                        <p class="card-text">Details: {{ post['detail'] }}</p>
+                    </div>
+                </div>
+                {% for message in get_flashed_messages() %}
+                    <div class="flash">{{ message }}</div>
+                {% endfor %}
+                {% if g.userType == 'buyer' %}
+                    <form method="post" action="{{ url_for('BOOKS.order', id=post['id']) }}">
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend"><span class="input-group-text"
+                                                                   id="inputGroup-sizing-default">Number to order</span>
+                            </div>
+                            <input type="number" class="form-control" aria-label="Sizing example input"
+                                   aria-describedby="inputGroup-sizing-default" name="number" min="0" value="1">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Order</button>
+                    </form>
+                {% endif %}
+                {% if g.userType == 'seller' %}
+                    {% if g.user['id'] == post['author_id'] %}
+                        <button type="submit" class="btn btn-primary">Edit</button>
+                    {% endif %}
+                {% endif %}
+                {% if not g.user  %}
+                    <a href="{{ url_for('index') }}" type="submit" class="btn btn-primary">Sign in</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        {% for comment in comments %}
+            <div class="card mb-3">
+                <div class="card-header"> {{ comment['username'] }}</div>
+                <div class="card-body">
+                    <h5 class="card-title">{{ comment['title'] }}</h5>
+                    <p class="card-text">{{ comment['body'] }}</p>
+                    <p class="card-text"><small class="text-muted">{{ comment['created'] }}</small></p>
+                </div>
+            </div>
+        {% endfor %}
+        {% if g.userType == 'buyer' %}
+            <form method="post">
+                {% for message in get_flashed_messages() %}
+                    <div class="flash">{{ message }}</div>
+                {% endfor %}
+                <div class="form-group">
+                    <h5><label for="exampleFormControlTextarea1">Comment</label></h5>
+                    <label for="exampleFormControlTextarea1">Title</label>
+                    <input name="title" id="title" value="{{ request.form['title'] }}" required class="form-control">
+                    <label for="exampleFormControlTextarea1">Context</label>
+                    <textarea class="form-control" id="exampleFormControlTextarea1" rows="5" name="body"
+                              id="body">{{ request.form['body'] }}</textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+        {% endif %}
+    </div>
+{% endblock %}

@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block header %}
+    <h1>{% block title %}Orders{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+    <br>
+
+
+    <div class="container">
+        {% for order in orders %}
+            <div class="card mb-3">
+                <div class="card-header">{% if g.userType == 'seller' %}
+                            Buyer:
+                        {% endif %}
+                        {% if g.userType == 'buyer' %}
+                            Seller:
+                        {% endif %}
+                        {{ order['username'] }} </div>
+                <div class="card-body">
+                    <h5 class="card-title">
+                        {{ order['title'] }}<span
+                        class="badge badge-primary badge-pill ml-sm-2">{{ order['number'] }}</span></h5>
+                    <p class="card-text"><h6>Delivery Information:</h6></p>
+                    <p class="card-text">Name: {{ order['name'] }}</p>
+                    <p class="card-text">Phone Number: {{ order['phone'] }}</p>
+                    <p class="card-text">Address: {{ order['address'] + order['address2'] }}</p>
+                    <p class="card-text">City: {{ order['city'] }}</p>
+                    <p class="card-text">Zip: {{ order['zip'] }}</p>
+                    <p class="card-text"><small class="text-muted">{{ order['created'] }}</small></p>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}
