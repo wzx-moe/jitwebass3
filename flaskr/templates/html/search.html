@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block header %}
+    <h1>{% block title %}Search Result{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+    <br>
+    <div class="container">
+    <h4>Search Result:</h4>
+<br>
+                <div class="row row-cols-1 row-cols-md-5 text-center">
+                    {% for post in result %}
+                        <div class="col mb-4">
+                            <div class="card"><img
+                                    src="{{ url_for('static', filename= './images/' + post['picture'],_t=val1) }}"
+                                    class="card-img-top">
+                                <div class="card-body">
+                                    <h5 class="card-title">{{ post['title'] }}</h5>
+                                    <p class="card-text">{{ post['author'] }}</p>
+                                    <button type="button" class="badge badge-pill badge-secondary mb-4"> Inventory <span
+                                            class="badge badge-light">{{ post['inventory'] }}</span></button>
+                                </div>
+                                <div class="card-footer"><a href="{{ url_for('BOOKS.detail', id=post['id']) }}"
+                                                            class="btn btn-primary">Details</a>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+    </div>
+{% endblock %}

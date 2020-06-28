@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block header %}
+    <h1>{% block title %}Add Books{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+    <br>
+    <div class="container">
+        <h3>Add Books <span class="badge badge-danger">New</span></h3>
+        {% for message in get_flashed_messages() %}
+            <div class="flash">{{ message }}</div>
+        {% endfor %}
+        <form method="post" enctype="multipart/form-data" action="{{ url_for('BOOKS.create') }}">
+            <div class="form-group">
+                <label for="exampleFormControlInput1">Book Name</label>
+                <input name="title" id="title" value="{{ request.form['title'] }}" required type="name"
+                       class="form-control">
+            </div>
+            <div class="form-group">
+                <label for="exampleFormControlInput2">Book Author</label>
+                <input name="author" id="author" type="name" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label for="exampleFormControlInput2">Category</label>
+                <input name="category" id="category" type="name" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label for="exampleFormControlInput2">Price</label>
+                <input name="price" id="price" type="number" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label for="exampleFormControlFile1">Book Picture</label>
+                <input name="picture" type="file" class="form-control-file" id="picture">
+            </div>
+            <div class="form-group">
+                <label for="exampleFormControlSelect1">Book Number</label>
+                <input name="number" id="number" type='number' class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label for="exampleFormControlTextarea1">Book Details</label>
+                <textarea class="form-control" rows="3" name="detail"
+                          id="detail" required></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    </div>
+{% endblock %}
